@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "skill": "universal-prompt",
+    "purpose": "评测 description 触发准确性（should-trigger / should-not-trigger）",
+    "method": "60% 训练 / 40% 留出；选择 test 分数最高的 description 版本，防过拟合",
+    "acceptance": { "should_trigger_min": 0.9, "should_not_false_positive_max": 0.1 },
+    "version": "1.0.0"
+  },
+  "should_trigger": [
+    { "id": "ST-01", "query": "帮我优化一下这个提示词：把这段需求写成能直接用的 prompt", "note": "显式优化意图" },
+    { "id": "ST-02", "query": "优化提示词：写一份竞品分析", "note": "触发词前缀" },
+    { "id": "ST-03", "query": "我这段 system prompt 能不能改进？", "note": "system prompt 审查" },
+    { "id": "ST-04", "query": "评估一下这个提示词好不好，打打分", "note": "评估意图" },
+    { "id": "ST-05", "query": "我的提示词不 work，输出老是跑题，帮我诊断一下", "note": "诊断意图" },
+    { "id": "ST-06", "query": "把这个 prompt 从 Claude 迁移到 GPT 上要用什么写法？", "note": "迁移意图" },
+    { "id": "ST-07", "query": "这个提示词太长了，帮我压缩一下，控制在 200 字", "note": "压缩意图" },
+    { "id": "ST-08", "query": "帮我写一个给 DeepSeek 用的中文写作提示词", "note": "按模型构建" },
+    { "id": "ST-09", "query": "improve this prompt before I ship it", "note": "英文优化意图" },
+    { "id": "ST-10", "query": "write a system prompt for a code review agent", "note": "英文构建 agent 指令" },
+    { "id": "ST-11", "query": "帮我看看这个提示词适配 GPT 还是 Claude 更好", "note": "环境适配判断" },
+    { "id": "ST-12", "query": "这个提示词用词是不是太多了？哪里可以精简", "note": "用词经济性判断" },
+    { "id": "ST-13", "query": "这个 agent 的指令写得太乱了，帮我重写一下", "note": "agent 指令重写" },
+    { "id": "ST-14", "query": "帮我写个 system_prompt 给客服机器人", "note": "system_prompt 下划线变体" },
+    { "id": "ST-15", "query": "prompt engineering 刚入门，帮我优化一下这个 prompt", "note": "中英混合" },
+    { "id": "ST-16", "query": "我这段提示词适配 Kimi 吗？跑起来总是不对", "note": "具体模型适配" },
+    { "id": "ST-17", "query": "这段 prompt 太啰嗦了帮我瘦身", "note": "prompt 压缩口语化" },
+    { "id": "ST-18", "query": "the prompt keeps giving wrong format, help me fix it", "note": "英文诊断" },
+    { "id": "ST-19", "query": "评估下这个 system prompt 的安全性和可证伪性", "note": "评估+维度词" },
+    { "id": "ST-20", "query": "帮我把这个提示词从 GPT 换到 Claude 的写法", "note": "迁移口语化" }
+  ],
+  "should_not_trigger": [
+    { "id": "SN-01", "query": "帮我把这句话改顺一点：今天天气不错我们出去玩吧", "note": "普通润色，宿主可直接做" },
+    { "id": "SN-02", "query": "写一封请假邮件给老板", "note": "普通写作任务，无提示词意图" },
+    { "id": "SN-03", "query": "解释一下什么是 REST API", "note": "知识问答" },
+    { "id": "SN-04", "query": "帮我把这段代码改成 async 版本", "note": "直接编码任务" },
+    { "id": "SN-05", "query": "总结一下这篇新闻", "note": "普通总结" },
+    { "id": "SN-06", "query": "翻译这句话成英文", "note": "普通翻译" },
+    { "id": "SN-07", "query": "帮我计算一下这个数据集的平均值", "note": "数据分析，非提示词工程" },
+    { "id": "SN-08", "query": "今天股市怎么样？", "note": "普通资讯查询" },
+    { "id": "SN-09", "query": "帮我改改这篇作文的错别字", "note": "作文润色，非提示词" },
+    { "id": "SN-10", "query": "这个 API 返回了 500 错误，帮我看看", "note": "API 调试，非提示词" },
+    { "id": "SN-11", "query": "如何优化我的网站加载速度？", "note": "优化对象是网站非提示词" },
+    { "id": "SN-12", "query": "评估一下这份财报的风险点", "note": "评估对象是财报非提示词" },
+    { "id": "SN-13", "query": "写一个 React 组件实现列表拖拽", "note": "写代码组件，非提示词" },
+    { "id": "SN-14", "query": "帮我把这段录音转成文字", "note": "转录任务" },
+    { "id": "SN-15", "query": "这个 bug 在第三行，怎么修？", "note": "代码 bug 修复" },
+    { "id": "SN-16", "query": "我的 API key 丢了怎么办", "note": "API key 非提示词" },
+    { "id": "SN-17", "query": "帮我安排一下明天的行程", "note": "日程规划" },
+    { "id": "SN-18", "query": "写一封求职信给 HR", "note": "普通文书" },
+    { "id": "SN-19", "query": "我的电脑很卡，怎么优化？", "note": "系统优化非提示词" },
+    { "id": "SN-20", "query": "翻译 system 这个单词", "note": "单词本身非 system prompt" }
+  ]
+}
