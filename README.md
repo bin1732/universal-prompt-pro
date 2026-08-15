@@ -147,9 +147,7 @@ Q-Score 8 维评估（详见 `references/scoring-rubric.md`）：
 
 **MIT License** — 详见 [LICENSE](LICENSE) 文件。
 
-本仓库为开源版本（v1.0.x），永久保留。后续增强版本将以闭源形式在 Coze / 虾评平台发布。
-
-This repository contains the open-source version (v1.0.x) and will remain publicly available. Future enhanced versions will be released as closed-source on the Coze / XiaPing platform.
+本项目采用 MIT 开源协议，欢迎自由使用、修改和分发。
 
 ---
 
