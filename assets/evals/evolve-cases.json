@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "skill": "universal-prompt",
+    "purpose": "P5 跨引擎冒烟测试：版本化/画像/自进化/eval/双档 全部可复现",
+    "method": "validate.mjs 调用 P5 各引擎（version-store / habit-profile / evolve / run-evals / expert-panel），用临时目录注入，断言行为正确",
+    "acceptance": {
+      "versioning": "快照可写读、compare 增量正确、rollback 可回滚",
+      "habit": "set/get 生效、prefill 补字段、reset 回默认、非法枚举回默认、画像不改评分（中立）",
+      "evolve": "失败入库、阈值提案、未验证不可确认（两级边界）、确认后 rules_ready",
+      "eval": "baseline 通过率正确、decide 保留/回退正确",
+      "panel": "双档切换正确、触发信号正确、仲裁分歧处理正确"
+    },
+    "version": "1.0.0"
+  },
+  "version_cases": [
+    { "id": "VER-01", "label": "快照 before/after 对比增量正确", "steps": "snapshot A(70) → snapshot B(88) → compare(A,B) 期望 Δ18", "expect_delta": 18 },
+    { "id": "VER-02", "label": "回滚返回目标版本", "steps": "rollback to A 期望 prompt 等于 A.prompt", "expect_match": "A" }
+  ],
+  "habit_cases": [
+    { "id": "HAB-01", "label": "set/get 生效", "steps": "set language=英 → get 返回 英" },
+    { "id": "HAB-02", "label": "prefill 补缺失指纹字段", "steps": "fp 缺 language → prefill 后 language=英（来自画像）" },
+    { "id": "HAB-03", "label": "非法枚举值回默认（防脏数据）", "steps": "set verbosity=超长 → get 返回 标准" },
+    { "id": "HAB-04", "label": "reset 一键清空回默认", "steps": "reset → language=中" }
+  ],
+  "evolve_cases": [
+    { "id": "EVO-01", "label": "3 条同类失败 → 达阈值提案", "threshold": 3, "failures": 3 },
+    { "id": "EVO-02", "label": "未验证先确认被阻止（两级边界）", "expect_error": "必须先联网验证" },
+    { "id": "EVO-03", "label": "联网验证后确认 → rules_ready", "expect_status": "rules_ready" }
+  ],
+  "eval_cases": [
+    { "id": "EVL-01", "label": "baseline 通过率 100%（scoring.json）", "cases_file": "evals/scoring.json", "tier": "regression", "expect_pass_rate": 100 },
+    { "id": "EVL-02", "label": "decide 改进保留", "baseline": 70, "current": 75, "expect_decision": "keep" },
+    { "id": "EVL-03", "label": "decide 回退", "baseline": 80, "current": 75, "expect_decision": "revert" }
+  ],
+  "panel_cases": [
+    { "id": "PNL-01", "label": "低分触发评审团", "score": 45, "expect_mode": "panel" },
+    { "id": "PNL-02", "label": "正常不触发（单核）", "score": 78, "risk": "low", "expect_mode": "single" },
+    { "id": "PNL-03", "label": "生产场景触发", "score": 78, "risk": "production", "expect_mode": "panel" },
+    { "id": "PNL-04", "label": "仲裁分歧<20 裁定", "ops": [{"dim": "specificity", "vote": 62}, {"dim": "specificity", "vote": 80}], "expect_decided": true },
+    { "id": "PNL-05", "label": "仲裁分歧≥20 未裁定需依据", "ops": [{"dim": "specificity", "vote": 62}, {"dim": "specificity", "vote": 85}, {"dim": "specificity", "vote": 90}], "expect_decided": false }
+  ]
+}
