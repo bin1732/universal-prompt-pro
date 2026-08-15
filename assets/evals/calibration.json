@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "skill": "universal-prompt",
+    "purpose": "专家盲评校准采样集：20 条提示词（10 好 10 坏），匿名化供专家排序，与 Q-Score 排序比对（Spearman ≥0.8）",
+    "method": "calibrate.mjs table 生成盲评表 → 专家独立排序 → compare 计算一致性；self-check 验证工具自洽",
+    "acceptance": { "gate": 0.8, "note": "≥80% 才允许 Q-Score 作为对外分数" },
+    "version": "1.0.0"
+  },
+  "cases": [
+    { "id": "C-01", "expected_quality": "good", "fp": { "model_family": "claude", "task_type": "代码" }, "prompt": "你是一个资深 TypeScript 工程师。请重构 getData() 使用 async/await。完成标准：通过现有单测并处理 null 返回。不要编造类型，无法确定时按 unknown 处理。输出格式：Markdown 代码块 + 3 条变更说明，不超过 200 字。" },
+    { "id": "C-02", "expected_quality": "bad", "prompt": "帮我弄一下这个东西，让它好一点。" },
+    { "id": "C-03", "expected_quality": "good", "fp": { "model_family": "deepseek", "task_type": "写作" }, "prompt": "你是资深科技记者。请写一篇 500 字以内的短文介绍量子计算，面向非专业读者，语气轻松但准确。结构：背景1段、原理2段、展望1段。若涉及不确定数据，注明来源。" },
+    { "id": "C-04", "expected_quality": "bad", "prompt": "写一个总结，并且同时翻译成英文，顺便再帮我分析一下优缺点。" },
+    { "id": "C-05", "expected_quality": "good", "fp": { "model_family": "gpt", "task_type": "抽取" }, "prompt": "你是数据抽取助手。请从以下文本中抽取所有日期、金额和人名。输出 JSON 数组，每个对象含 type/value/position 三字段。若某项不存在，值为 null。示例：[{\"type\":\"date\",\"value\":\"2026-01-01\",\"position\":12}]。" },
+    { "id": "C-06", "expected_quality": "bad", "prompt": "请写一个清晰、专业、完整的营销方案，要好看，要高效。" },
+    { "id": "C-07", "expected_quality": "good", "fp": { "model_family": "deepseek", "task_type": "RAG" }, "prompt": "你是检索问答助手。仅基于提供的上下文回答问题，每条回答标注引用来源段编号 [段号]。若上下文不足以回答，明确回复无法回答，不要编造。若上下文矛盾，指出矛盾点，不自行取舍。" },
+    { "id": "C-08", "expected_quality": "bad", "prompt": "make it better please, it's not good enough." },
+    { "id": "C-09", "expected_quality": "good", "fp": { "model_family": "claude", "task_type": "代码" }, "prompt": "你是代码审查专家。请审查以下函数的竞态条件。输出：按严重度排序的问题列表，每条含严重级别与修复建议，最多 200 词。若代码正确，明确说明。不要编造不存在的问题。" },
+    { "id": "C-10", "expected_quality": "bad", "prompt": "帮我优化一下这段代码。" },
+    { "id": "C-11", "expected_quality": "good", "fp": { "model_family": "deepseek", "task_type": "分析" }, "prompt": "你是数据分析师。请分析这份销售数据的季度增长趋势。输出格式：Markdown 表格，含环比/同比与结论。若数据缺失，标注缺失并说明影响，不要用估计值填补。" },
+    { "id": "C-12", "expected_quality": "bad", "prompt": "请务必一定千万要写一个极其重要的报告，充分发挥您的专业能力，让我们一起努力。" },
+    { "id": "C-13", "expected_quality": "good", "fp": { "model_family": "claude", "task_type": "agentic" }, "prompt": "你是一个自主测试代理。可用工具：run-tests(目标), read-logs(路径)。工作循环：思考→行动→观察→重复。停止条件：全部测试通过时输出报告；连续失败 3 次时停止并报告失败原因；无法确定时询问用户。权限：只允许运行测试与读日志，禁止修改代码。" },
+    { "id": "C-14", "expected_quality": "bad", "prompt": "你是助手。帮我做点东西。随便什么都行。" },
+    { "id": "C-15", "expected_quality": "good", "fp": { "model_family": "gpt", "task_type": "分类" }, "prompt": "你是邮件分类器。类别白名单：投诉/退款/物流/咨询。规则：多主题邮件取主意图；无法归类时输出咨询。示例：\"订单还没到\"→物流；\"我要退钱\"→退款。只输出类别名。" },
+    { "id": "C-16", "expected_quality": "bad", "prompt": "写一篇关于人工智能的文章。" },
+    { "id": "C-17", "expected_quality": "good", "fp": { "model_family": "deepseek", "task_type": "教育" }, "prompt": "你是数学导师。学习者水平：初学者。用提问引导而非直接给答案：先问前置概念，答错时用提示性问题纠正。若连续 3 次答不出，降低难度给出部分提示。结束时用 1 个综合题巩固。" },
+    { "id": "C-18", "expected_quality": "bad", "prompt": "帮我写一下，谢谢。快点。" },
+    { "id": "C-19", "expected_quality": "good", "fp": { "model_family": "claude", "task_type": "决策" }, "prompt": "你是决策顾问。决策问题：选择技术栈。候选：A/B/C。评估维度与权重：成本40%、收益30%、风险30%。输出：每方案逐维打分(1-5)、加权总分表、推荐与理由、不推荐方案的代价、权重±10%敏感性提示。" },
+    { "id": "C-20", "expected_quality": "bad", "prompt": "翻译这个，翻译那个，再总结一下，顺便写个评论。" }
+  ]
+}
