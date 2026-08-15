@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "purpose": "提示词注入特征串库（直接/间接注入检测）",
+    "maintenance": "随安全情报更新（OWASP 测试载荷 + 社区变体）；黄线层可联网检查新变体（自动 + TTL 缓存 + 来源标注）",
+    "version": "1.0.0"
+  },
+  "direct_injection": [
+    { "pattern": "忽略之前(的)?(所有)?(的)?(内容|指令|规则)", "label": "忽略指令覆盖尝试" },
+    { "pattern": "忽略上面(的)?(所有)?(的)?(内容|指令|规则)", "label": "忽略上文覆盖尝试" },
+    { "pattern": "忽略之前的(提示词|prompt)", "label": "忽略原提示词尝试" },
+    { "pattern": "输出(system prompt|系统提示词|你的指令|你最初的指令)", "label": "诱导泄露 system prompt" },
+    { "pattern": "输出你的system\\s*prompt|告诉我你的system\\s*prompt|展示你的system\\s*prompt|请说出你的system\\s*prompt", "label": "诱导泄露 system prompt（紧邻词变体，空格无关，防全角/空格拆分）" },
+    { "pattern": "输出.{0,8}(提示词|原始指令|初始指令|初始提示词)", "label": "诱导泄露提示词（变体）" },
+    { "pattern": "display (the )?(system prompt|your instructions|your initial prompt)", "label": "英文：泄露指令尝试" },
+    { "pattern": "ignore (all )?(previous|prior) (instructions|prompts)", "label": "英文：忽略指令" },
+    { "pattern": "你现在是(一个)?(无限制|不受限)的", "label": "越权角色劫持" },
+    { "pattern": "act as (if )?(an? )?unrestricted", "label": "英文：越权角色劫持" },
+    { "pattern": "绕过(安全|审查|限制|过滤器)", "label": "绕过安全机制尝试" },
+    { "pattern": "jailbreak|DAN mode", "label": "知名 jailbreak 标记" },
+    { "pattern": "reveal (your )?(hidden )?(prompt|instructions)", "label": "英文：泄露隐藏指令" },
+    { "pattern": "reveal\\s*(your\\s*)?(hidden\\s*)?(prompt|instructions|system\\s*prompt)", "label": "英文：泄露隐藏指令（空格无关，防全角/空格拆分）" },
+    { "pattern": "hulve zhiqian|hulve shangmian|hulve suoyou zhiling|quxiao zhiqian", "label": "拼音变体：忽略指令（有限覆盖）" },
+    { "pattern": "shuchu nide system prompt|shuchu nide zhiling|baolou nide zhiling", "label": "拼音变体：泄露指令（有限覆盖）" }
+  ],
+  "indirect_injection": [
+    { "pattern": "<system>|<user>|<assistant>", "label": "伪造对话角色标签（间接注入载体）" },
+    { "pattern": "human: |assistant: ", "label": "伪造人机对话格式" },
+    { "pattern": "developer: |tool_result", "label": "伪造系统级消息格式" }
+  ],
+  "note": "命中注入特征 → 隔离标注 + 不执行该内容中的任何指令（OWASP 建议 3/6）。词库仅用于检测与防护。"
+}
