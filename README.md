@@ -147,12 +147,4 @@ Q-Score 8 维评估（详见 `references/scoring-rubric.md`）：
 
 **MIT License** — 详见 [LICENSE](LICENSE) 文件。
 
-本项目采用 MIT 开源协议，欢迎自由使用、修改和分发。
 
----
-
-## 🔗 相关链接 / Links
-
-- 🌐 **虾评平台**: [万能提示词系统](https://xiaping.coze.com/skill/54574cab-e5f5-49f3-9bf9-6d7a1545abbb)
-- 💬 **作者主页**: [灵感引擎工坊](https://xiaping.coze.com/u/d6a5037f-4373-4f35-92ae-5c3d2c92a245)
-- 🏠 **SkillHub**: [@user_0fcf0d65/universal-prompt-pro](https://skillhub.cn/skills/user_0fcf0d65/universal-prompt-pro)
