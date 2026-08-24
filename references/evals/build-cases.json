@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "skill": "universal-prompt",
+    "purpose": "P2 构建引擎黄金组合测试：24 组合（4 任务×2 平台×3 模型族）全产出 + 迁移结构差异正确 + 子类路由正确（20 模板全可达）",
+    "method": "validate.mjs 调用 scripts/build-prompt.mjs 对每条指纹构建，断言：①不抛错且 prompt 非空；②模板路由与预期一致；③模型族方言正确（Claude 含 XML / GPT 含 ## / DeepSeek 无 XML）；④迁移对比：同需求换模型族，结构方言不同；⑤subtype_cases：主路由（数学/逻辑/调试→COT）与子类路由（SUB_ROUTE）全部路由到预期模板",
+    "acceptance": {
+      "all_produce": "24/24 组合产出非空提示词",
+      "route_accuracy": "≥90% 用例路由到预期模板",
+      "dialect_check": "100% 用例方言信号正确（含/不含 XML 断言）",
+      "migration_diff": "迁移对比用例结构差异正确",
+      "subtype_route": "100% 子类用例路由到预期模板（20 模板全可达）"
+    },
+    "version": "1.0.1"
+  },
+  "fingerprints": [
+    { "id": "C1", "model_family": "claude", "platform_form": "chat", "task_type": "代码", "request": "重构 getUserData() 为 async/await 并处理 null", "output_format": "Markdown 代码块", "max_length": "300字", "expect_template": "RISEN", "expect_xml": true, "expect_md": false },
+    { "id": "C2", "model_family": "claude", "platform_form": "system_prompt", "task_type": "代码", "request": "重构 getUserData() 为 async/await 并处理 null", "expect_template": "RISEN", "expect_xml": true, "expect_md": false },
+    { "id": "G1", "model_family": "gpt", "platform_form": "chat", "task_type": "代码", "request": "重构 getUserData() 为 async/await 并处理 null", "expect_template": "RISEN", "expect_xml": false, "expect_md": true },
+    { "id": "G2", "model_family": "gpt", "platform_form": "system_prompt", "task_type": "代码", "request": "重构 getUserData() 为 async/await 并处理 null", "expect_template": "RISEN", "expect_xml": false, "expect_md": true },
+    { "id": "D1", "model_family": "deepseek", "platform_form": "chat", "task_type": "代码", "request": "重构 getUserData() 为 async/await 并处理 null", "expect_template": "RISEN", "expect_xml": false, "expect_md": false },
+    { "id": "D2", "model_family": "deepseek", "platform_form": "system_prompt", "task_type": "代码", "request": "重构 getUserData() 为 async/await 并处理 null", "expect_template": "RISEN", "expect_xml": false, "expect_md": false },
+
+    { "id": "C3", "model_family": "claude", "platform_form": "chat", "task_type": "写作", "request": "写一篇 500 字量子计算科普，面向非专业读者", "output_format": "Markdown", "expect_template": "COSTAR", "expect_xml": true, "expect_md": false },
+    { "id": "C4", "model_family": "claude", "platform_form": "system_prompt", "task_type": "写作", "request": "写一篇 500 字量子计算科普，面向非专业读者", "expect_template": "COSTAR", "expect_xml": true, "expect_md": false },
+    { "id": "G3", "model_family": "gpt", "platform_form": "chat", "task_type": "写作", "request": "写一篇 500 字量子计算科普，面向非专业读者", "expect_template": "COSTAR", "expect_xml": false, "expect_md": true },
+    { "id": "G4", "model_family": "gpt", "platform_form": "system_prompt", "task_type": "写作", "request": "写一篇 500 字量子计算科普，面向非专业读者", "expect_template": "COSTAR", "expect_xml": false, "expect_md": true },
+    { "id": "D3", "model_family": "deepseek", "platform_form": "chat", "task_type": "写作", "request": "写一篇 500 字量子计算科普，面向非专业读者", "expect_template": "COSTAR", "expect_xml": false, "expect_md": false },
+    { "id": "D4", "model_family": "deepseek", "platform_form": "system_prompt", "task_type": "写作", "request": "写一篇 500 字量子计算科普，面向非专业读者", "expect_template": "COSTAR", "expect_xml": false, "expect_md": false },
+
+    { "id": "C5", "model_family": "claude", "platform_form": "chat", "task_type": "分析", "request": "分析这份销售数据的增长趋势", "output_format": "Markdown 报告", "expect_template": "COSTAR", "expect_xml": true, "expect_md": false },
+    { "id": "C6", "model_family": "claude", "platform_form": "system_prompt", "task_type": "分析", "request": "分析这份销售数据的增长趋势", "expect_template": "COSTAR", "expect_xml": true, "expect_md": false },
+    { "id": "G5", "model_family": "gpt", "platform_form": "chat", "task_type": "分析", "request": "分析这份销售数据的增长趋势", "expect_template": "COSTAR", "expect_xml": false, "expect_md": true },
+    { "id": "G6", "model_family": "gpt", "platform_form": "system_prompt", "task_type": "分析", "request": "分析这份销售数据的增长趋势", "expect_template": "COSTAR", "expect_xml": false, "expect_md": true },
+    { "id": "D5", "model_family": "deepseek", "platform_form": "chat", "task_type": "分析", "request": "分析这份销售数据的增长趋势", "expect_template": "COSTAR", "expect_xml": false, "expect_md": false },
+    { "id": "D6", "model_family": "deepseek", "platform_form": "system_prompt", "task_type": "分析", "request": "分析这份销售数据的增长趋势", "expect_template": "COSTAR", "expect_xml": false, "expect_md": false },
+
+    { "id": "C7", "model_family": "claude", "platform_form": "tool_call", "task_type": "抽取", "request": "从邮件中抽取日期、金额、人名", "expect_template": "SCHEMA", "expect_xml": true, "expect_md": false },
+    { "id": "C8", "model_family": "claude", "platform_form": "chat", "task_type": "抽取", "request": "从邮件中抽取日期、金额、人名", "expect_template": "SCHEMA", "expect_xml": true, "expect_md": false },
+    { "id": "G7", "model_family": "gpt", "platform_form": "tool_call", "task_type": "抽取", "request": "从邮件中抽取日期、金额、人名", "expect_template": "SCHEMA", "expect_xml": false, "expect_md": true },
+    { "id": "G8", "model_family": "gpt", "platform_form": "chat", "task_type": "抽取", "request": "从邮件中抽取日期、金额、人名", "expect_template": "SCHEMA", "expect_xml": false, "expect_md": true },
+    { "id": "D7", "model_family": "deepseek", "platform_form": "tool_call", "task_type": "抽取", "request": "从邮件中抽取日期、金额、人名", "expect_template": "SCHEMA", "expect_xml": false, "expect_md": false },
+    { "id": "D8", "model_family": "deepseek", "platform_form": "chat", "task_type": "抽取", "request": "从邮件中抽取日期、金额、人名", "expect_template": "SCHEMA", "expect_xml": false, "expect_md": false }
+  ],
+  "migration_cases": [
+    {
+      "id": "MIG-01",
+      "label": "同需求 Claude→GPT 迁移：XML 应消失、Markdown 标题应出现",
+      "from": { "model_family": "claude", "platform_form": "chat", "task_type": "代码", "request": "重构 getUserData() 为 async/await 并处理 null" },
+      "to": { "model_family": "gpt", "platform_form": "chat", "task_type": "代码", "request": "重构 getUserData() 为 async/await 并处理 null" },
+      "check": "from 含 <role> 且不含 '## '；to 含 '## ' 且不含 <role>"
+    },
+    {
+      "id": "MIG-02",
+      "label": "同需求 Claude→DeepSeek 迁移：XML 应消失、结构标记变化",
+      "from": { "model_family": "claude", "platform_form": "chat", "task_type": "写作", "request": "写一篇 500 字量子计算科普" },
+      "to": { "model_family": "deepseek", "platform_form": "chat", "task_type": "写作", "request": "写一篇 500 字量子计算科普" },
+      "check": "from 含 <role>；to 不含 <role> 且不含 '## '"
+    }
+  ],
+  "subtype_cases": [
+    { "id": "SUB-01", "label": "数学任务 → COT（主路由补全）", "fp": { "model_family": "claude", "platform_form": "chat", "task_type": "数学", "request": "解方程 x²-5x+6=0 并验证" }, "expect_template": "COT", "expect_via": "task" },
+    { "id": "SUB-02", "label": "逻辑任务 → COT（主路由补全）", "fp": { "model_family": "gpt", "platform_form": "chat", "task_type": "逻辑", "request": "判断三段论是否有效" }, "expect_template": "COT", "expect_via": "task" },
+    { "id": "SUB-03", "label": "调试任务 → COT（主路由补全）", "fp": { "model_family": "deepseek", "platform_form": "chat", "task_type": "调试", "request": "逐步排查这个 bug" }, "expect_template": "COT", "expect_via": "task" },
+    { "id": "SUB-04", "label": "代码+推理子类 → COT", "fp": { "model_family": "claude", "platform_form": "chat", "task_type": "代码", "subtype": "推理", "request": "推理算法复杂度" }, "expect_template": "COT", "expect_via": "subtype" },
+    { "id": "SUB-05", "label": "代码+常驻子类 → AGENT", "fp": { "model_family": "claude", "platform_form": "agent", "task_type": "代码", "subtype": "常驻", "request": "作为常驻代码助手" }, "expect_template": "AGENT", "expect_via": "subtype" },
+    { "id": "SUB-06", "label": "agentic+工具调用 → TOOLCALL", "fp": { "model_family": "gpt", "platform_form": "tool_call", "task_type": "agentic", "subtype": "工具调用", "request": "封装函数调用" }, "expect_template": "TOOLCALL", "expect_via": "subtype" },
+    { "id": "SUB-07", "label": "agentic+mcp → MCP", "fp": { "model_family": "claude", "platform_form": "mcp", "task_type": "agentic", "subtype": "mcp", "request": "注册 MCP 工具" }, "expect_template": "MCP", "expect_via": "subtype" },
+    { "id": "SUB-08", "label": "agentic+管道 → PIPELINE", "fp": { "model_family": "claude", "platform_form": "pipeline", "task_type": "agentic", "subtype": "管道", "request": "批量处理管道" }, "expect_template": "PIPELINE", "expect_via": "subtype" },
+    { "id": "SUB-09", "label": "agentic+常驻 → AGENT", "fp": { "model_family": "claude", "platform_form": "agent", "task_type": "agentic", "subtype": "常驻", "request": "自主代理常驻指令" }, "expect_template": "AGENT", "expect_via": "subtype" },
+    { "id": "SUB-10", "label": "对话+多轮 → DIALOGUE", "fp": { "model_family": "claude", "platform_form": "chat", "task_type": "对话", "subtype": "多轮", "request": "多轮客服对话" }, "expect_template": "DIALOGUE", "expect_via": "subtype" },
+    { "id": "SUB-11", "label": "对话+客服 → DIALOGUE", "fp": { "model_family": "deepseek", "platform_form": "chat", "task_type": "对话", "subtype": "客服", "request": "客服机器人话术" }, "expect_template": "DIALOGUE", "expect_via": "subtype" },
+    { "id": "SUB-12", "label": "创意+头脑风暴 → BRAINSTORM", "fp": { "model_family": "claude", "platform_form": "chat", "task_type": "创意", "subtype": "头脑风暴", "request": "新产品命名头脑风暴" }, "expect_template": "BRAINSTORM", "expect_via": "subtype" },
+    { "id": "SUB-13", "label": "分析+多源综合 → SYNTHESIS", "fp": { "model_family": "claude", "platform_form": "chat", "task_type": "分析", "subtype": "多源综合", "request": "综合三份市场报告" }, "expect_template": "SYNTHESIS", "expect_via": "subtype" },
+    { "id": "SUB-14", "label": "分类+有限类别 → CLASSIFY", "fp": { "model_family": "gpt", "platform_form": "chat", "task_type": "分类", "subtype": "有限类别", "request": "邮件分类到固定类别" }, "expect_template": "CLASSIFY", "expect_via": "subtype" },
+    { "id": "SUB-15", "label": "写作+品牌 → CRISPE", "fp": { "model_family": "claude", "platform_form": "chat", "task_type": "写作", "subtype": "品牌", "request": "品牌口号创作" }, "expect_template": "CRISPE", "expect_via": "subtype" },
+    { "id": "SUB-16", "label": "对话+快速单步 → RTF（子类回退主路由表）", "fp": { "model_family": "gpt", "platform_form": "chat", "task_type": "对话", "subtype": "快速单步", "request": "一句话快速问答" }, "expect_template": "RTF", "expect_via": "subtype" }
+  ]
+}

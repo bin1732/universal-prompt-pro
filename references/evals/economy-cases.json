@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "skill": "universal-prompt",
+    "purpose": "P3 Token 经济性引擎测试：冗余检测能抓住已知冗余、不误伤正常提示词、预算计算可复现",
+    "method": "validate.mjs 调用 scripts/token-count.mjs（detectRedundancy + budgetReport）对每条用例断言：①expected_redundancy 类别至少 1 项命中；②clean 用例冗余命中数为 0（不误伤）；③同一用例两次运行结果一致（确定性）",
+    "acceptance": {
+      "redundancy_recall": "≥90% 冗余用例抓到预期类别",
+      "no_false_positive": "100% 干净用例冗余命中为 0",
+      "determinism": "100% 用例两次运行一致"
+    },
+    "version": "1.0.1"
+  },
+  "redundancy_cases": [
+    {
+      "id": "RED-01",
+      "label": "同义堆叠：务必+一定+千万要",
+      "prompt": "请务必一定千万要写一篇报告。",
+      "expected_redundancy": ["同义堆叠"]
+    },
+    {
+      "id": "RED-02",
+      "label": "无信息量套话：充分发挥专业能力",
+      "prompt": "请充分发挥您的专业能力，写出高质量的内容。",
+      "expected_redundancy": ["无信息量套话"]
+    },
+    {
+      "id": "RED-03",
+      "label": "过度修饰：极其重要",
+      "prompt": "这是一个极其重要的任务，请认真处理。",
+      "expected_redundancy": ["过度修饰"]
+    },
+    {
+      "id": "RED-04",
+      "label": "重复约束：同一句出现两次",
+      "prompt": "请务必认真完成。请务必认真完成。不要遗漏任何细节。",
+      "expected_redundancy": ["重复约束"]
+    },
+    {
+      "id": "RED-05",
+      "label": "混合冗余：套话+堆叠",
+      "prompt": "让我们一起努力，务必一定把方案做好，众所周知质量第一。",
+      "expected_redundancy": ["无信息量套话", "同义堆叠"]
+    },
+    {
+      "id": "RED-06",
+      "label": "英文冗余不明显（应少命中）",
+      "prompt": "Please please please make sure to write a good report.",
+      "expected_redundancy": [],
+      "note": "英文冗余暂不在规则库（诚实边界：只报中文高置信模式）"
+    }
+  ],
+  "clean_cases": [
+    {
+      "id": "CLN-01",
+      "label": "干净抽取提示词",
+      "prompt": "你是一个数据抽取助手。从文本中抽取日期和金额，输出 JSON，字段缺失值为 null，不要编造。"
+    },
+    {
+      "id": "CLN-02",
+      "label": "干净 RAG 提示词",
+      "prompt": "你是检索问答助手。基于上下文回答问题，标注引用来源段编号。上下文不足时回复无法回答。"
+    },
+    {
+      "id": "CLN-03",
+      "label": "干净写作提示词（含风格词但非冗余）",
+      "prompt": "你是资深科技记者。写一篇 500 字短文介绍量子计算，面向非专业读者，语气轻松准确。"
+    }
+  ],
+  "budget_cases": [
+    {
+      "id": "BUD-01",
+      "label": "超预算检测",
+      "prompt": "你是一个数据抽取助手。从文本中抽取日期、金额、人名、地址、电话号码、邮箱、公司名、职位、学历、技能等所有字段，输出详细的 JSON 结构，包含每个字段的类型说明和示例值。",
+      "target_budget": 30,
+      "expect_over_budget": true
+    },
+    {
+      "id": "BUD-02",
+      "label": "未超预算",
+      "prompt": "写一篇短文。",
+      "target_budget": 100,
+      "expect_over_budget": false
+    },
+    {
+      "id": "BUD-03",
+      "label": "确定性：同一文本两次预算计算一致",
+      "prompt": "你是一个数据抽取助手。从文本中抽取日期和金额，输出 JSON。",
+      "target_budget": 50,
+      "expect_deterministic": true
+    }
+  ]
+}
